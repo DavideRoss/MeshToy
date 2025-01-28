@@ -4,7 +4,8 @@ IncludeDir = {
     GLAD =  "%{wks.location}/MeshToy/vendor/glad/include",
     GLM =  "%{wks.location}/MeshToy/vendor/glm",
     ImGUI = "%{wks.location}/MeshToy/vendor/imgui",
-    ImGUIBackends = "%{wks.location}/MeshToy/vendor/imgui/backends"
+    ImGUIBackends = "%{wks.location}/MeshToy/vendor/imgui/backends",
+    STB = "%{wks.location}/MeshToy/vendor/stb"
 }
 
 Library = {

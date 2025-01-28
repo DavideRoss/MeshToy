@@ -26,9 +26,13 @@ void BaseApp::HandleInput(GLFWwindow* InWindow)
 void BaseApp::Start()
 {
     const Quad TestQuad;
-    Material* QuadMaterial = new Material("Unlit");
+
+    Texture* CheckerTex = new Texture("textures/checker.png");
+    Material* QuadMaterial = new Material("Unlit_Texture");
     QuadMaterial->Use();
-    QuadMaterial->SetVector4("BaseColor", 0.3f, 0.3f, 0.7f, 1.0f);
+    
+    QuadMaterial->SetVector4("BaseColor", 1.0f, 1.0f, 1.0f, 1.0f);
+    QuadMaterial->SetTexture("Texture", CheckerTex);
 
     TestMesh = AddSceneObject<Mesh>("TestQuad", TestQuad.BuildStaticMesh(), QuadMaterial);
 }

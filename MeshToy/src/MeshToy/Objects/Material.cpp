@@ -12,6 +12,7 @@ Material::Material(const std::string& InMaterialName)
     std::string VertexSource;
     if (!ShaderCompiler::OpenFile(std::format("shaders/{}.vert", InMaterialName), VertexSource))
     {
+        // TODO: convert to use log macros
         std::cerr << std::format("Cannot open vertex shader for material {}!\n", InMaterialName);
         return;
     }
@@ -67,6 +68,18 @@ Material::Material(const std::string& InMaterialName)
 void Material::Use() const
 {
     glUseProgram(ProgramPtr);
+
+    int Index = 0;
+    for (const auto& [ParameterName, TexturePtr] : Textures)
+    {
+        SetInt(ParameterName, Index);
+        glActiveTexture(GL_TEXTURE0 + Index);
+        TexturePtr->Use();
+
+        // TODO: there's the risk going OOB
+        // TODO: check https://registry.khronos.org/OpenGL-Refpages/gl4/html/glActiveTexture.xhtml
+        Index++;
+    }
 }
 
 void Material::SetFloat(const std::string& ParameterName, float Value) const
@@ -101,4 +114,15 @@ void Material::SetMatrix4(const std::string& ParameterName, const glm::mat4& Val
         glGetUniformLocation(ProgramPtr, ParameterName.c_str()),
         1, GL_FALSE, glm::value_ptr(Value)
     );
+}
+
+void Material::SetTexture(const std::string& ParameterName, const Texture* InTexture)
+{
+    if (Textures.contains(ParameterName))
+    {
+        // TODO: add warning
+        return;
+    }
+
+    Textures.insert({ ParameterName, InTexture });
 }

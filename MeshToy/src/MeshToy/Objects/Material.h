@@ -1,7 +1,11 @@
 ﻿#pragma once
 
-#include <glm/fwd.hpp>
 #include <string>
+#include <unordered_map>
+
+#include <glm/fwd.hpp>
+
+#include "Texture.h"
 
 class Material
 {
@@ -21,8 +25,13 @@ public:
 
     void SetMatrix4(const std::string& ParameterName, const glm::mat4& Value) const;
 
+    // TODO: probably not the best way to handle textures
+    // TODO: correct way could be to store the uniform location along the texture number?
+    void SetTexture(const std::string& ParameterName, const Texture* InTexture);
+
 private:
     std::string MaterialName;
-
     unsigned int ProgramPtr = 0;
+    
+    std::unordered_map<std::string, const Texture*> Textures;
 };

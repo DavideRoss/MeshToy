@@ -27,7 +27,8 @@ project "MeshToy"
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.GLM}",
         "%{IncludeDir.ImGUI}",
-        "%{IncludeDir.ImGUIBackends}"
+        "%{IncludeDir.ImGUIBackends}",
+        "%{IncludeDir.STB}"
     }
 
     defines

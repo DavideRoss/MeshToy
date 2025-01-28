@@ -45,7 +45,7 @@ MeshToyApp::~MeshToyApp()
 
 void MeshToyApp::Start()
 {
-    for (const auto& SceneObject : SceneObjects | std::views::values)
+    for (const std::shared_ptr<SceneObject>& SceneObject : SceneObjects | std::views::values)
     {
         SceneObject->Start();
     }
@@ -59,7 +59,7 @@ void MeshToyApp::Run()
         DeltaTime = CurrentFrame - LastFrame;
         LastFrame = CurrentFrame;
 
-        for (const auto& SceneObject : SceneObjects | std::views::values)
+        for (const std::shared_ptr<SceneObject>& SceneObject : SceneObjects | std::views::values)
         {
             SceneObject->Update();
         }
@@ -76,7 +76,7 @@ void MeshToyApp::Run()
         RenderImGui_Internal();
         ImGuiRender();
 
-        for (const auto& SceneObject : SceneObjects | std::views::values)
+        for (const std::shared_ptr<SceneObject>& SceneObject : SceneObjects | std::views::values)
         {
             SceneObject->RenderImGui();
         }
@@ -85,7 +85,7 @@ void MeshToyApp::Run()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for (const auto& SceneObject : SceneObjects | std::views::values)
+        for (const std::shared_ptr<SceneObject>& SceneObject : SceneObjects | std::views::values)
         {
             SceneObject->Render();
         }
