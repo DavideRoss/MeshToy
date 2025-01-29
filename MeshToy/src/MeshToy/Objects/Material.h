@@ -20,6 +20,9 @@ public:
     void SetFloat(const std::string& ParameterName, float Value) const;
     void SetInt(const std::string& ParameterName, int Value) const;
 
+    void SetVector2(const std::string& ParameterName, float X = 0, float Y = 0) const;
+    void SetVector2(const std::string& ParameterName, glm::vec2 Value) const;
+
     void SetVector4(const std::string& ParameterName, float X = 0, float Y = 0, float Z = 0, float W = 0) const;
     void SetVector4(const std::string& ParameterName, glm::vec4 Value) const;
 

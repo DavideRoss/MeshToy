@@ -1,9 +1,12 @@
 ﻿#include "BaseApp.h"
 
+#include <glad/glad.h>
+
 #include "imgui.h"
 
 #include "MeshToy/SceneObjects/Mesh.h"
 #include "MeshToy/Shapes/Quad.h"
+#include "MeshToy/Utils/Gizmos.h"
 
 BaseApp::BaseApp(): MeshToyApp({
     .WindowTitle = "TestApp",
@@ -12,39 +15,34 @@ BaseApp::BaseApp(): MeshToyApp({
 
 void BaseApp::HandleInput(GLFWwindow* InWindow)
 {
-    if (glfwGetKey(InWindow, GLFW_KEY_R) == GLFW_PRESS)
-    {
-        Scale += 1.0f * MeshToyApp::DeltaTime;
-    }
 
-    if (glfwGetKey(InWindow, GLFW_KEY_T) == GLFW_PRESS)
-    {
-        Scale -= 1.0f * MeshToyApp::DeltaTime;
-    }
 }
 
 void BaseApp::Start()
 {
-    const Quad TestQuad;
 
-    Texture* CheckerTex = new Texture("textures/checker.png");
-    Material* QuadMaterial = new Material("Unlit_Texture");
-    QuadMaterial->Use();
-    
-    QuadMaterial->SetVector4("BaseColor", 1.0f, 1.0f, 1.0f, 1.0f);
-    QuadMaterial->SetTexture("Texture", CheckerTex);
-
-    TestMesh = AddSceneObject<Mesh>("TestQuad", TestQuad.BuildStaticMesh(), QuadMaterial);
 }
 
 void BaseApp::Update()
 {
-    TestMesh->SetScale(glm::vec3(Scale));
+    
+}
+
+void BaseApp::Render()
+{
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    Gizmos::Color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    Gizmos::DrawCircle({ -2.0f, 0.0f }, 0.125f);
+    Gizmos::DrawCircle({ 2.0f, 0.0f }, 0.125f);
+    Gizmos::DrawCircle({ 0.0f, 0.0f }, 0.125f);
+
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void BaseApp::ImGuiRender()
 {
-    // TODO: this should be a sceneobject
+    // TODO: this should be a SceneObject
     ImGui::Begin("Control Panel");
         
     ImGui::Text("FPS: %.2f", ImGui::GetIO().Framerate);

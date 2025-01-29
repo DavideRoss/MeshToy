@@ -92,6 +92,22 @@ void Material::SetInt(const std::string& ParameterName, int Value) const
     glUniform1i(glGetUniformLocation(ProgramPtr, ParameterName.c_str()), Value);
 }
 
+void Material::SetVector2(const std::string& ParameterName, float X, float Y) const
+{
+    glUniform2f(
+        glGetUniformLocation(ProgramPtr, ParameterName.c_str()),
+        X, Y
+    );
+}
+
+void Material::SetVector2(const std::string& ParameterName, glm::vec2 Value) const
+{
+    glUniform2f(
+        glGetUniformLocation(ProgramPtr, ParameterName.c_str()),
+        Value.x, Value.y
+    );
+}
+
 void Material::SetVector4(const std::string& ParameterName, float X, float Y, float Z, float W) const
 {
     glUniform4f(
