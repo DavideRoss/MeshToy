@@ -72,4 +72,6 @@ private:
     float LastFrame = 0.0f;
     
     std::unordered_map<std::string, std::shared_ptr<SceneObject>> SceneObjects;
+
+    bool bShowDemoWindow = false;
 };

@@ -8,7 +8,7 @@
 class ShaderCompiler
 {
 public:
-    static bool OpenFile(const std::string& Path, std::string& OutData);
+    static bool OpenFile(const std::string& Path, std::string& OutData, bool bSkipExtensions = false);
     static bool CompileShader(const GLenum Type, const std::string& Source, unsigned int& OutShaderPtr, std::string& OutError);
 
 private:
@@ -18,4 +18,6 @@ private:
     
 private:
     static std::vector<std::string> Includes;
+
+    static std::vector<std::string> Extensions;
 };

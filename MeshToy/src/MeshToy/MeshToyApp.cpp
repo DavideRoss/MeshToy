@@ -29,6 +29,7 @@ MeshToyApp::MeshToyApp(MeshToyAppSettings InSettings)
     InitializeGLAD();
     InitializeImGui();
 
+    // TODO: implement order-independent transparency?
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -149,6 +150,7 @@ void MeshToyApp::InitializeImGui()
     ImGuiIO& IO = ImGui::GetIO(); (void)IO;
     IO.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     IO.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    IO.FontGlobalScale = 1.5f;
 
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(Window, true);
@@ -188,7 +190,19 @@ void MeshToyApp::RenderImGui_Internal()
             ImGui::MenuItem("Test 1234");
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Help"))
+        {
+            if (ImGui::MenuItem("ImGUI Demo", nullptr, bShowDemoWindow))
+            {
+                bShowDemoWindow = !bShowDemoWindow;
+            }
+
+            ImGui::EndMenu();
+        }
         
         ImGui::EndMainMenuBar();
     }
+
+    if (bShowDemoWindow) ImGui::ShowDemoWindow(&bShowDemoWindow);
 }

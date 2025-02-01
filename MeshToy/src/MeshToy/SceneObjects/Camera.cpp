@@ -49,6 +49,23 @@ void Camera::HandleInput(GLFWwindow* Window)
 
     // TODO: use something like if(std::abs(v1-v2)<0.01) (put on a utils class)
     if (LastExtent != Extent) bDirty = true;
+
+    CalculateMousePosition(Window);
+}
+
+void Camera::CalculateMousePosition(GLFWwindow* Window)
+{
+    double MouseX, MouseY;
+    glfwGetCursorPos(Window, &MouseX, &MouseY);
+
+    const glm::vec4 ClipSpace(
+        (2.0f * static_cast<float>(MouseX)) / static_cast<float>(MeshToyApp::WindowWidth) - 1.0f,
+        1.0f - (2.0f * static_cast<float>(MouseY)) / static_cast<float>(MeshToyApp::WindowHeight),
+        -1.0f, 1.0f
+    );
+
+    const glm::vec4 WorldSpace = glm::inverse(Projection * View) * ClipSpace;
+    MousePosition = glm::vec2(WorldSpace.x, WorldSpace.y);
 }
 
 void Camera::RenderImGui()
@@ -56,12 +73,18 @@ void Camera::RenderImGui()
     ImGui::Begin("Camera");
 
     ImGui::Text("Position:");
-    ImGui::SameLine(100);
+    ImGui::SameLine(120);
     ImGui::Text(glm::to_string(Offset).c_str());
 
     ImGui::Text("Extent:");
-    ImGui::SameLine(100);
+    ImGui::SameLine(120);
     ImGui::Text(std::to_string(Extent).c_str());
+
+    ImGui::Text("Mouse:");
+    ImGui::SameLine(120);
+    ImGui::Text(glm::to_string(MousePosition).c_str());
+    
+    ImGui::Text("Yey!");
 
     bool bResetAll = ImGui::Button("Reset All");
     ImGui::SameLine();

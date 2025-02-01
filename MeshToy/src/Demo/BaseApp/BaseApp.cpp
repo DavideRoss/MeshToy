@@ -32,10 +32,9 @@ void BaseApp::Render()
 {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    Gizmos::Color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-    Gizmos::DrawCircle({ -2.0f, 0.0f }, 0.125f);
-    Gizmos::DrawCircle({ 2.0f, 0.0f }, 0.125f);
-    Gizmos::DrawCircle({ 0.0f, 0.0f }, 0.125f);
+    Gizmos::DrawCircle({ -2.0f, -1.0f }, 0.05f);
+    Gizmos::DrawCircle({ 2.0f, 1.0f }, 0.05f);
+    Gizmos::DrawLine({ -2.0f, -1.0f }, { 2.0f, 1.0f }, 0.01f);
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

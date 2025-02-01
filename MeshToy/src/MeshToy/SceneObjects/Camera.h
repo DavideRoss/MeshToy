@@ -19,6 +19,7 @@ public:
 
 private:
     void UpdateMatrices(bool bForce = false);
+    void CalculateMousePosition(GLFWwindow* Window);
 
 private:
     glm::mat4 Projection  = glm::mat4(1.0f);
@@ -34,4 +35,6 @@ private:
     float Extent = 2.0f;
     float NearPlane = 0.1f;
     float FarPlane = 100.0f;
+
+    glm::vec2 MousePosition = glm::vec2(0.0f);
 };
