@@ -1,47 +1,60 @@
 ﻿#include "Material.h"
 
+#include <filesystem>
 #include <format>
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
+#include "yaml-cpp/yaml.h"
+
+#include "MeshToy/Utils/Log.h"
 
 #include "MeshToy/Utils/ShaderCompiler.h"
 
 Material::Material(const std::string& InMaterialName)
     : MaterialName(InMaterialName)
 {
-    std::string VertexSource;
-    if (!ShaderCompiler::OpenFile(std::format("shaders/{}.vert", InMaterialName), VertexSource))
-    {
-        // TODO: convert to use log macros
-        std::cerr << std::format("Cannot open vertex shader for material {}!\n", InMaterialName);
-        return;
-    }
+    const std::string MaterialPath = std::format("materials/{}.yml", InMaterialName);
 
-    std::string FragmentSource;
-    if (!ShaderCompiler::OpenFile(std::format("shaders/{}.frag", InMaterialName), FragmentSource))
+    if (!std::filesystem::exists(MaterialPath))
     {
-        std::cerr << std::format("Cannot open fragment shader for material {}!\n", InMaterialName);
-        return;
+        MESHTOY_EXCEPTION(std::format("Material definition for \"{}\" not found", InMaterialName));
     }
-
-    std::string CompileError;
-    unsigned int VertexShaderPtr;
-    if (!ShaderCompiler::CompileShader(GL_VERTEX_SHADER, VertexSource, VertexShaderPtr, CompileError))
-    {
-        std::cerr << "Cannot compile vertex shader:\n" << CompileError << '\n';
-        return;
-    }
-
-    unsigned int FragmentShaderPtr;
-    if (!ShaderCompiler::CompileShader(GL_FRAGMENT_SHADER, FragmentSource, FragmentShaderPtr, CompileError))
-    {
-        std::cerr << "Cannot compile fragment shader:\n" << CompileError << '\n';
-        return;
-    }
+    
+    YAML::Node MaterialDef = YAML::LoadFile(MaterialPath);
+    YAML::Node ShadersDef = MaterialDef["shaders"];
 
     ProgramPtr = glCreateProgram();
-    glAttachShader(ProgramPtr, VertexShaderPtr);
-    glAttachShader(ProgramPtr, FragmentShaderPtr);
+
+    for (YAML::const_iterator It = ShadersDef.begin(); It != ShadersDef.end(); ++It)
+    {
+        std::string ShaderType = It->first.as<std::string>();
+        std::string ShaderPath = It->second.as<std::string>();
+
+        int ShaderEnum;
+        if (ShaderType == "vertex") ShaderEnum = GL_VERTEX_SHADER;
+        else if (ShaderType == "fragment") ShaderEnum = GL_FRAGMENT_SHADER;
+        else MESHTOY_EXCEPTION("Shader type not recognized");
+
+        std::string Source;
+        if (!ShaderCompiler::OpenFile(std::format("shaders/{}", ShaderPath), Source))
+        {
+            // TODO: convert to use log macros
+            std::cerr << std::format("Cannot open {} shader for material \"{}\"!\n", ShaderType, InMaterialName);
+            return;
+        }
+
+        std::string CompileError;
+        unsigned int ShaderPtr;
+        if (!ShaderCompiler::CompileShader(ShaderEnum, Source, ShaderPtr, CompileError))
+        {
+            std::cerr << "Cannot compile vertex shader:\n" << CompileError << '\n';
+            return;
+        }
+
+        glAttachShader(ProgramPtr, ShaderPtr);
+        glDeleteShader(ShaderPtr);
+    }
+
     glLinkProgram(ProgramPtr);
 
     int Success;
@@ -54,10 +67,8 @@ Material::Material(const std::string& InMaterialName)
         return;
     }
 
-    glDeleteShader(VertexShaderPtr);
-    glDeleteShader(FragmentShaderPtr);
-
     // TODO: use define to get the global data
+    // TODO: move it to material definition?
     const unsigned int UniformBlockIndex = glGetUniformBlockIndex(ProgramPtr, "Matrices");
     if (UniformBlockIndex != GL_INVALID_INDEX)
     {

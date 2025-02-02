@@ -8,6 +8,10 @@
 glm::vec4 Gizmos::Color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 std::map<std::string, Material*> Gizmos::Materials;
 
+// TODO: do not regenerate the vertices everytime
+//       instead, create a unit quad and move it around with
+//       the model matrix
+
 void Gizmos::DrawCircle(const glm::vec2 Position, const float Radius)
 {
     GenerateQuad(

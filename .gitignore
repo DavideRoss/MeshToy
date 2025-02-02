@@ -412,3 +412,6 @@ Makefile
 
 .DS_Store
 imgui.ini
+
+# Include bins in vendor folder
+!MeshToy/vendor/**/[Bb]in

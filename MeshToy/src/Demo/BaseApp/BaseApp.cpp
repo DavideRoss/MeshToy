@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 
 #include "imgui.h"
+#include "MeshToy/SceneObjects/Camera.h"
+#include "MeshToy/SceneObjects/Grid.h"
 
-#include "MeshToy/SceneObjects/Mesh.h"
-#include "MeshToy/Shapes/Quad.h"
 #include "MeshToy/Utils/Gizmos.h"
 
 BaseApp::BaseApp(): MeshToyApp({
@@ -20,7 +20,8 @@ void BaseApp::HandleInput(GLFWwindow* InWindow)
 
 void BaseApp::Start()
 {
-
+    AddSceneObject<Camera>("MainCamera");
+    AddSceneObject<Grid>("MainGrid");
 }
 
 void BaseApp::Update()

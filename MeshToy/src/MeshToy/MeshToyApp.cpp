@@ -34,9 +34,6 @@ MeshToyApp::MeshToyApp(MeshToyAppSettings InSettings)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(Settings.ClearColor.x, Settings.ClearColor.y, Settings.ClearColor.z, 1.0f);
-
-    AddSceneObject<Camera>("MainCamera");
-    AddSceneObject<Grid>("MainGrid");
 }
 
 MeshToyApp::~MeshToyApp()
