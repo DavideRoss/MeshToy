@@ -1,13 +1,14 @@
 ﻿#include "Camera.h"
 
 #include <glad/glad.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "imgui.h"
+
 #include "MeshToy/MeshToyApp.h"
 
 void Camera::Start()
@@ -74,17 +75,15 @@ void Camera::RenderImGui()
 
     ImGui::Text("Position:");
     ImGui::SameLine(120);
-    ImGui::Text(glm::to_string(Offset).c_str());
+    ImGui::Text("%s", glm::to_string(Offset).c_str());
 
     ImGui::Text("Extent:");
     ImGui::SameLine(120);
-    ImGui::Text(std::to_string(Extent).c_str());
+    ImGui::Text("%s", std::to_string(Extent).c_str());
 
     ImGui::Text("Mouse:");
     ImGui::SameLine(120);
-    ImGui::Text(glm::to_string(MousePosition).c_str());
-    
-    ImGui::Text("Yey!");
+    ImGui::Text("%s", glm::to_string(MousePosition).c_str());
 
     bool bResetAll = ImGui::Button("Reset All");
     ImGui::SameLine();

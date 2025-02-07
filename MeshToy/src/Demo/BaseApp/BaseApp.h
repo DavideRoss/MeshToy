@@ -2,8 +2,6 @@
 
 #include "MeshToy/MeshToyApp.h"
 
-class Mesh;
-
 class BaseApp : public MeshToyApp
 {
 public:

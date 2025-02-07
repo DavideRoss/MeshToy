@@ -14,6 +14,7 @@ class MeshData
 {
 public:
     MeshData();
+    // TODO: support normal arrays as well
     MeshData(std::vector<Vertex> InVertices, std::vector<unsigned int> InIndices);
 
     void Build();

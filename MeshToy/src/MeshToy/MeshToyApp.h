@@ -3,8 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 
 #include <GLFW/glfw3.h>
 
