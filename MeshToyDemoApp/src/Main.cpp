@@ -1,9 +1,4 @@
-#include <format>
-#include <iostream>
-
-#include "Demo/BaseApp/BaseApp.h"
-
-#include "yaml-cpp/yaml.h"
+#include "BaseApp.h"
 
 int main(int argc, char* argv[])
 {

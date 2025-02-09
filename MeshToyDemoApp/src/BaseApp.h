@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <glfw/include/GLFW/glfw3.h>
+
 #include "MeshToy/MeshToyApp.h"
 
 class Mesh;

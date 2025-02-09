@@ -15,5 +15,15 @@ workspace "MeshToy"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "MeshToy"
-include "MeshToyData"
+group "Core"
+    include "MeshToy"
+group ""
+
+group "Applications"
+    include "MeshToyDemoApp"
+group ""
+
+group "Data"
+    include "MeshToyData"
+group ""
+
