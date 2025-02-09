@@ -38,12 +38,51 @@ void Gizmos::DrawLine(const glm::vec2 Start, const glm::vec2 End, const float Th
 
     GenerateQuad(TopLeft, BottomRight);
 
-    const Material* CircleMaterial = FindOrLoadMaterial("SDF_Line");
-    CircleMaterial->Use();
-    CircleMaterial->SetVector4("Color", Gizmos::Color);
-    CircleMaterial->SetVector2("Start", Start);
-    CircleMaterial->SetVector2("End", End);
-    CircleMaterial->SetFloat("Thickness", Thickness);
+    const Material* LineMaterial = FindOrLoadMaterial("SDF_Line");
+    LineMaterial->Use();
+    LineMaterial->SetVector4("Color", Gizmos::Color);
+    LineMaterial->SetVector2("Start", Start);
+    LineMaterial->SetVector2("End", End);
+    LineMaterial->SetFloat("Thickness", Thickness);
+
+    Draw();
+}
+
+void Gizmos::DrawBezier(glm::vec2 P0, glm::vec2 P1, glm::vec2 P2, glm::vec2 P3, float Thickness)
+{
+    const glm::vec2 A = 3.0f * P3 - 9.0f * P2 + 9.0f * P1 - 3.0f * P0;
+    const glm::vec2 B = 6.0f * P0 - 12.0f * P1 + 6.0f * P2;
+    const glm::vec2 C = 3.0f * P1 - 3.0f * P0;
+
+    CubicBezier Curve(P0, P1, P2, P3);
+    std::vector<glm::vec2> Candidates = { P0, P3 };
+
+    SolveQuadratic(A.x, B.x, C.x, Curve, Candidates);
+    SolveQuadratic(A.y, B.y, C.y, Curve, Candidates);
+
+    glm::vec2 MinPoint = Candidates[0];
+    glm::vec2 MaxPoint = Candidates[0];
+    for (const glm::vec2& P : Candidates)
+    {
+        MinPoint = glm::min(MinPoint, P);
+        MaxPoint = glm::max(MaxPoint, P);
+    }
+
+    glm::vec2 ThicknessVector(Thickness, Thickness);
+    MinPoint -= ThicknessVector;
+    MaxPoint += ThicknessVector;
+    
+    
+    GenerateQuad(MinPoint, MaxPoint);
+
+    const Material* CurveMaterial = FindOrLoadMaterial("SDF_CubicBezier");
+    CurveMaterial->Use();
+    CurveMaterial->SetVector4("Color", Gizmos::Color);
+    CurveMaterial->SetVector2("P0", P0);
+    CurveMaterial->SetVector2("P1", P1);
+    CurveMaterial->SetVector2("P2", P2);
+    CurveMaterial->SetVector2("P3", P3);
+    CurveMaterial->SetFloat("Thickness", Thickness);
 
     Draw();
 }
@@ -59,6 +98,38 @@ Material* Gizmos::FindOrLoadMaterial(const std::string& MaterialName)
     Material* NewMaterial = new Material(MaterialName);
     Materials[MaterialName] = NewMaterial;
     return NewMaterial;
+}
+
+glm::vec2 Gizmos::EvaluateCubic(const float T, const CubicBezier& Curve)
+{
+    const float F = 1.0f - T;
+    return
+        Curve.P0 * F * F * F +
+        3.0f * Curve.P1 * T * F * F +
+        3.0f * Curve.P2 * T * T * F +
+        Curve.P3 * T * T * T;
+}
+
+void Gizmos::SolveQuadratic(const float A, const float B, const float C, const CubicBezier& Curve, std::vector<glm::vec2>& Candidates)
+{
+    if (glm::abs(A) > 0.0f)
+    {
+        const float Disc = B * B - 4 * A * C;
+        if (Disc > 0.0f)
+        {
+            const float SqrtDisc = sqrtf(Disc);
+            const float T1 = (-B + SqrtDisc) / (2.0f * A);
+            const float T2 = (-B - SqrtDisc) / (2.0f * A);
+
+            if (T1 >= 0.0f && T1 <= 1.0f) Candidates.push_back(EvaluateCubic(T1, Curve));
+            if (T2 >= 0.0f && T2 <= 1.0f) Candidates.push_back(EvaluateCubic(T2, Curve));
+        }
+    }
+    else if (glm::abs(B) > 0.0f)
+    {
+        const float T = -C / B;
+        if (T > 0.0f && T <= 1.0f) Candidates.push_back(EvaluateCubic(T, Curve));
+    }
 }
 
 void Gizmos::GenerateQuad(glm::vec2 TopLeft, glm::vec2 BottomRight)

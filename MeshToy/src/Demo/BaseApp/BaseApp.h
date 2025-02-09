@@ -14,4 +14,7 @@ public:
     void Update() override;
     void Render() override;
     void ImGuiRender() override;
+
+private:
+    float Time = 0.0f;
 };

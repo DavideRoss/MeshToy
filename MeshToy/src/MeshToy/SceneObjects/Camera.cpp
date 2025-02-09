@@ -29,7 +29,7 @@ void Camera::Update()
 
 void Camera::HandleInput(GLFWwindow* Window)
 {
-    glm::vec2 DeltaOffset(
+    const glm::vec2 DeltaOffset(
         glfwGetKey(Window, GLFW_KEY_A) - glfwGetKey(Window, GLFW_KEY_D),
         glfwGetKey(Window, GLFW_KEY_S) - glfwGetKey(Window, GLFW_KEY_W)
     );
@@ -74,19 +74,17 @@ void Camera::RenderImGui()
 
     ImGui::Text("Position:");
     ImGui::SameLine(120);
-    ImGui::Text(glm::to_string(Offset).c_str());
+    ImGui::Text("%s", glm::to_string(Offset).c_str());
 
     ImGui::Text("Extent:");
     ImGui::SameLine(120);
-    ImGui::Text(std::to_string(Extent).c_str());
+    ImGui::Text("%s", std::to_string(Extent).c_str());
 
     ImGui::Text("Mouse:");
     ImGui::SameLine(120);
-    ImGui::Text(glm::to_string(MousePosition).c_str());
-    
-    ImGui::Text("Yey!");
+    ImGui::Text("%s", glm::to_string(MousePosition).c_str());
 
-    bool bResetAll = ImGui::Button("Reset All");
+    const bool bResetAll = ImGui::Button("Reset All");
     ImGui::SameLine();
 
     if (ImGui::Button("Set to (0, 0)") || bResetAll)

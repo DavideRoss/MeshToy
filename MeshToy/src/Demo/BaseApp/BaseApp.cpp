@@ -1,7 +1,5 @@
 ﻿#include "BaseApp.h"
 
-#include <glad/glad.h>
-
 #include "imgui.h"
 #include "MeshToy/SceneObjects/Camera.h"
 #include "MeshToy/SceneObjects/Grid.h"
@@ -26,17 +24,29 @@ void BaseApp::Start()
 
 void BaseApp::Update()
 {
-    
+    Time += DeltaTime;
 }
 
 void BaseApp::Render()
 {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    
-    Gizmos::DrawCircle({ -2.0f, -1.0f }, 0.05f);
-    Gizmos::DrawCircle({ 2.0f, 1.0f }, 0.05f);
-    Gizmos::DrawLine({ -2.0f, -1.0f }, { 2.0f, 1.0f }, 0.01f);
 
+    const glm::vec2 P0(-1.0f, 0.0f);
+    const glm::vec2 P1(-0.5f, 2.0f * glm::sin(Time * 2.0f));
+    const glm::vec2 P2(0.5f + glm::sin(Time), 1.0f);
+    const glm::vec2 P3(1.0f, 0.0f);
+
+    Gizmos::Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    Gizmos::DrawBezier(P0, P1, P2, P3, 0.01f);
+
+    Gizmos::Color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    Gizmos::DrawCircle(P0, 0.02f);
+    Gizmos::DrawCircle(P1, 0.02f);
+    Gizmos::DrawCircle(P2, 0.02f);
+    Gizmos::DrawCircle(P3, 0.02f);
+    Gizmos::DrawLine(P0, P1, 0.005f);
+    Gizmos::DrawLine(P2, P3, 0.005f);
+    
     // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

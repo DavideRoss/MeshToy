@@ -1,0 +1,4 @@
+name: SDF_Circle
+shaders:
+    vertex: SDF/SDF_Base.vert
+    fragment: SDF/SDF_CubicBezier.frag
